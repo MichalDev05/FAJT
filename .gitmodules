@@ -1,0 +1,3 @@
+[submodule "FAJT/vendor/GLFW"]
+	path = FAJT/vendor/GLFW
+	url = https://github.com/glfw/glfw.git
