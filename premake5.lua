@@ -26,7 +26,8 @@ project "FAJT"
 
     files{
         "%{prj.name}/src/**.h",
-        "%{prj.name}/src/**.cpp"
+        "%{prj.name}/src/**.cpp",
+        "%{prj.name}/res/**.*"
     }
 
     includedirs{
