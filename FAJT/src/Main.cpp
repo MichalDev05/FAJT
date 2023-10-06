@@ -12,11 +12,11 @@ int main() {
 	std::cout << "Hello World!";
 
 	float vertices[] = {
-		// positions          // colors           // texture coords
-		 0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // top right
-		 0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // bottom right
-		-0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // bottom left
-		-0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // top left 
+		// positions          // texture coords
+		 0.5f,  0.5f, 0.0f,   1.0f, 1.0f,   // top right
+		 0.5f, -0.5f, 0.0f,   1.0f, 0.0f,   // bottom right
+		-0.5f, -0.5f, 0.0f,   0.0f, 0.0f,   // bottom left
+		-0.5f,  0.5f, 0.0f,   0.0f, 1.0f    // top left 
 	};
 	
 	unsigned int indices[] = {  // note that we start from 0!
@@ -60,10 +60,6 @@ int main() {
 	///---------------------Textures-----------------------
 	//Generate texture
 	Texture texture("res/textures/ShrekProfile.jpg");
-	glEnableVertexAttribArray(2);
-
-	//Color
-	glEnableVertexAttribArray(1);
 
 	///---------------------Shaders------------------------
 	//Shader shaderProgram("res/shaders/default.vert", "res/shaders/default.frag");
@@ -71,11 +67,13 @@ int main() {
 	///----------------------------------------------------
 
 	//specify opengl implementation
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+	//number of values for 1 vertex
+	int vertexValuesCount = 5;
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, vertexValuesCount * sizeof(float), (void*)0);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, vertexValuesCount * sizeof(float), (void*)(3 * sizeof(float)));
 	//enable opengl implementation
 	glEnableVertexAttribArray(0);
+	glEnableVertexAttribArray(1);
 
 	//Activate shaderProgram
 	shaderProgram.Activate();
