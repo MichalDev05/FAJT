@@ -2,6 +2,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include "Shader.h";
+#include "Texture.h";
 #include "VBO.h";
 #include "EBO.h";
 #include "VAO.h";
@@ -11,11 +12,13 @@ int main() {
 	std::cout << "Hello World!";
 
 	float vertices[] = {
-	 0.5f,  0.5f, 0.0f,  // top right
-	 0.5f, -0.5f, 0.0f,  // bottom right
-	-0.5f, -0.5f, 0.0f,  // bottom left
-	-0.5f,  0.5f, 0.0f   // top left 
+		// positions          // colors           // texture coords
+		 0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // top right
+		 0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // bottom right
+		-0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // bottom left
+		-0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // top left 
 	};
+	
 	unsigned int indices[] = {  // note that we start from 0!
 		0, 1, 3,   // first triangle
 		1, 2, 3    // second triangle
@@ -52,14 +55,25 @@ int main() {
 	//Create Element Buffer Object
 	EBO EBO1(indices, sizeof(indices));
 	EBO1.Bind();
-	
+
+
+	///---------------------Textures-----------------------
+	//Generate texture
+	Texture texture("res/textures/ShrekProfile.jpg");
+	glEnableVertexAttribArray(2);
+
+	//Color
+	glEnableVertexAttribArray(1);
 
 	///---------------------Shaders------------------------
-	Shader shaderProgram("res/shaders/default.vert", "res/shaders/default.frag");
+	//Shader shaderProgram("res/shaders/default.vert", "res/shaders/default.frag");
+	Shader shaderProgram("res/shaders/textured.vert", "res/shaders/textured.frag");
 	///----------------------------------------------------
 
 	//specify opengl implementation
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
 	//enable opengl implementation
 	glEnableVertexAttribArray(0);
 
@@ -74,10 +88,11 @@ int main() {
 		glClear(GL_COLOR_BUFFER_BIT);
 		// Use ShaderProgram
 		shaderProgram.Activate();
+
 		//Bind VAO
 		VAO1.Bind();
 		//Set polygon render mode (wireframe)
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		//Draw triangles
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 

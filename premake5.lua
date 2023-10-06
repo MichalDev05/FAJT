@@ -12,6 +12,7 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}";
 includeDir = {}
 includeDir["GLFW"] = "FAJT/vendor/GLFW/include"
 includeDir["Glad"] = "FAJT/vendor/Glad/include"
+includeDir["stb"]  = "FAJT/vendor/stb"
 
 include "FAJT/vendor/GLFW"
 include "FAJT/vendor/Glad"
@@ -33,7 +34,8 @@ project "FAJT"
     includedirs{
         "%{prj.name}/src",
         "%{includeDir.GLFW}",
-        "%{includeDir.Glad}"
+        "%{includeDir.Glad}",
+        "%{includeDir.stb}"
     }
 
     links{
