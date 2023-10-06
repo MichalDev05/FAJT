@@ -1,11 +1,14 @@
 #include <iostream>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include "Shader.h";
-#include "Texture.h";
-#include "VBO.h";
-#include "EBO.h";
-#include "VAO.h";
+#include "Shader.h"
+#include "Texture.h"
+#include "VBO.h"
+#include "EBO.h"
+#include "VAO.h"
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 
 int main() {
@@ -64,6 +67,19 @@ int main() {
 	///---------------------Shaders------------------------
 	//Shader shaderProgram("res/shaders/default.vert", "res/shaders/default.frag");
 	Shader shaderProgram("res/shaders/textured.vert", "res/shaders/textured.frag");
+
+	//Activate shaderProgram
+	shaderProgram.Activate();
+
+	//Crate and set/edit transform
+	glm::mat4 transform = glm::mat4(1.0f);
+	transform = glm::rotate(transform, glm::radians(90.0f), glm::vec3(0.0, 0.0, 1.0));
+	transform = glm::scale(transform, glm::vec3(0.5, 0.5, 0.5));
+
+	//Assign transfrom to shader
+	unsigned int transformLoc = glGetUniformLocation(shaderProgram.shaderProgramID, "transform");
+	glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
+
 	///----------------------------------------------------
 
 	//specify opengl implementation
@@ -75,8 +91,6 @@ int main() {
 	glEnableVertexAttribArray(0);
 	glEnableVertexAttribArray(1);
 
-	//Activate shaderProgram
-	shaderProgram.Activate();
 
 
 	while (!glfwWindowShouldClose(window)) {

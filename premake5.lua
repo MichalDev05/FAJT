@@ -13,6 +13,7 @@ includeDir = {}
 includeDir["GLFW"] = "FAJT/vendor/GLFW/include"
 includeDir["Glad"] = "FAJT/vendor/Glad/include"
 includeDir["stb"]  = "FAJT/vendor/stb"
+includeDir["GLM"]  = "FAJT/vendor/glm"
 
 include "FAJT/vendor/GLFW"
 include "FAJT/vendor/Glad"
@@ -35,7 +36,8 @@ project "FAJT"
         "%{prj.name}/src",
         "%{includeDir.GLFW}",
         "%{includeDir.Glad}",
-        "%{includeDir.stb}"
+        "%{includeDir.stb}",
+        "%{includeDir.GLM}"
     }
 
     links{
