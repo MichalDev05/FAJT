@@ -21,6 +21,6 @@ public:
 		glDeleteVertexArrays(1, &m_VAO);
 	}
 
-private:
+public:
 	GLuint m_VAO;
 };

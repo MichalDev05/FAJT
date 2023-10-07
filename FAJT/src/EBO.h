@@ -23,6 +23,6 @@ public:
 		glDeleteBuffers(1, &m_EBO);
 	}
 
-private:
+public:
 	GLuint m_EBO;
 };

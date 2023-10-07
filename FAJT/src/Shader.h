@@ -1,4 +1,5 @@
 #pragma once
+#include<glm/glm.hpp>
 #include<glad/glad.h>
 #include<string>
 #include<fstream>
@@ -14,6 +15,8 @@ public:
 	GLuint shaderProgramID;
 
 	Shader(const char* vertexFile, const char* fragmentFile);
+
+	void Shader::setMat4(const std::string& name, const glm::mat4& matrix) const;
 
 	//Activate shaderProgram
 	void Activate();

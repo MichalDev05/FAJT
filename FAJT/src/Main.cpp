@@ -3,6 +3,7 @@
 #include <GLFW/glfw3.h>
 #include "Shader.h"
 #include "Texture.h"
+#include "Camera.h"
 #include "VBO.h"
 #include "EBO.h"
 #include "VAO.h"
@@ -14,17 +15,74 @@
 int main() {
 	std::cout << "Hello World!";
 
-	float vertices[] = {
+	/*float vertices[] = {
 		// positions          // texture coords
 		 0.5f,  0.5f, 0.0f,   1.0f, 1.0f,   // top right
 		 0.5f, -0.5f, 0.0f,   1.0f, 0.0f,   // bottom right
 		-0.5f, -0.5f, 0.0f,   0.0f, 0.0f,   // bottom left
-		-0.5f,  0.5f, 0.0f,   0.0f, 1.0f    // top left 
+		-0.5f,  0.5f, 0.0f,   0.0f, 1.0f,    // top left
+	};*/
+
+	float vertices[] = {
+	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+	 0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
+	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+
+	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+	 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+	 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+	-0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
+	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+
+	-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+	-0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+	-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+	 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+	 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+	 0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+	 0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
+	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+
+	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+	-0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
+	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f
+	};
+
+	glm::vec3 cubePositions[] = {
+		glm::vec3(0.0f,  0.0f,  0.0f),
+		glm::vec3(2.0f,  0.0f, -15.0f),
+		glm::vec3(-1.5f, -0.2f, -2.5f),
+		glm::vec3(-3.8f, -2.0f, -12.3f),
+		glm::vec3(2.4f, -0.4f, -3.5f),
+		glm::vec3(-1.7f,  3.0f, -7.5f),
+		glm::vec3(1.3f, -2.0f, -2.5f),
+		glm::vec3(1.5f,  2.0f, -2.5f),
+		glm::vec3(1.5f,  0.2f, -1.5f),
+		glm::vec3(-1.3f,  1.0f, -1.5f)
 	};
 	
 	unsigned int indices[] = {  // note that we start from 0!
 		0, 1, 3,   // first triangle
-		1, 2, 3    // second triangle
+		1, 2, 3,    // second triangle
 	};
 	
 	glfwInit();
@@ -43,7 +101,8 @@ int main() {
 
 
 	gladLoadGL();
-	glViewport(0, 0, 800, 800);
+	glEnable(GL_DEPTH_TEST);
+	glViewport(0, 0, 1280, 720);
 
 
 
@@ -71,14 +130,16 @@ int main() {
 	//Activate shaderProgram
 	shaderProgram.Activate();
 
-	//Crate and set/edit transform
-	glm::mat4 transform = glm::mat4(1.0f);
-	transform = glm::rotate(transform, glm::radians(90.0f), glm::vec3(0.0, 0.0, 1.0));
-	transform = glm::scale(transform, glm::vec3(0.5, 0.5, 0.5));
+	///----------------------------------------------------
 
-	//Assign transfrom to shader
-	unsigned int transformLoc = glGetUniformLocation(shaderProgram.shaderProgramID, "transform");
-	glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
+
+
+	///-------------------Camera/View----------------------
+	Camera camera(glm::vec3(0.0f, 0.0f, -20.0f), glm::vec3(0.0f, 1.0f, 0.0f), 90, 0);
+	glm::mat4 view = camera.GetViewMatrix();
+	glm::mat4 transform = glm::mat4(1.0f);
+	glm::mat4 projection = camera.GetProjectionMatrix(1280.0f / 720.0f);
+
 
 	///----------------------------------------------------
 
@@ -97,16 +158,33 @@ int main() {
 		// Set background color
 		glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
 		// Clean the back buffer and assign the new color to it
-		glClear(GL_COLOR_BUFFER_BIT);
+		//glClear(GL_COLOR_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		// Use ShaderProgram
 		shaderProgram.Activate();
+
+		shaderProgram.setMat4("view", view);
+		shaderProgram.setMat4("projection", projection);
+		//shaderProgram.setMat4("transform", transform);
+
+		VAO1.Bind();
+		for (unsigned int i = 0; i < 10; i++)
+		{
+			glm::mat4 model = glm::mat4(1.0f);
+			model = glm::translate(model, cubePositions[i]);
+			float angle = 20.0f * i;
+			model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+			shaderProgram.setMat4("transform", model);
+
+			glDrawArrays(GL_TRIANGLES, 0, 36);
+		}
 
 		//Bind VAO
 		VAO1.Bind();
 		//Set polygon render mode (wireframe)
 		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		//Draw triangles
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 		//Swap back and front buffer
 		glfwSwapBuffers(window);

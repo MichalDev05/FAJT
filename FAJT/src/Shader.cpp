@@ -93,6 +93,10 @@ Shader::Shader(const char* vertexFile, const char* fragmentFile)
 
 }
 
+void Shader::setMat4(const std::string& name, const glm::mat4& matrix) const
+{
+	glUniformMatrix4fv(glGetUniformLocation(shaderProgramID, name.c_str()), 1, GL_FALSE, &matrix[0][0]);
+}
 
 //Activate shaderProgram
 void Shader::Activate()
