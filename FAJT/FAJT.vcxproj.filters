@@ -73,6 +73,9 @@
     <Image Include="res\textures\training_hexas.png" />
     <Image Include="res\textures\uvTest.png" />
     <Image Include="res\textures\HexagonGrid.jpg" />
+    <Image Include="res\textures\HexagonGrid_2.jpg" />
+    <Image Include="res\textures\Grid1.png" />
+    <Image Include="res\textures\HexagonGrid_3.jpg" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="res\shaders\tiled.vert" />

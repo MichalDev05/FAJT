@@ -161,7 +161,10 @@
     <None Include="res\shaders\tiledTex.frag" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="res\textures\Grid1.png" />
     <Image Include="res\textures\HexagonGrid.jpg" />
+    <Image Include="res\textures\HexagonGrid_2.jpg" />
+    <Image Include="res\textures\HexagonGrid_3.jpg" />
     <Image Include="res\textures\ShrekProfile.jpg" />
     <Image Include="res\textures\training_hexas.png" />
     <Image Include="res\textures\uvTest.png" />

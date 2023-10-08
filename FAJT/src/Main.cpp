@@ -27,7 +27,7 @@ int main() {
 	std::vector<Texture> textures;
 	std::vector<Shader> shaders;
 
-	Player player(glm::vec3(0.0f, -2.5, -4.0f));
+	Player player(glm::vec3(0.0f, 10, -4.0f), -2.5);
 
 	/*float vertices[] = {
 		// positions          // texture coords
@@ -176,6 +176,9 @@ int main() {
 	textures.push_back(Texture("res/textures/uvTest.png"));
 	textures.push_back(Texture("res/textures/training_hexas.png"));
 	textures.push_back(Texture("res/textures/HexagonGrid.jpg"));
+	textures.push_back(Texture("res/textures/HexagonGrid_2.jpg"));
+	textures.push_back(Texture("res/textures/HexagonGrid_3.jpg"));
+	textures.push_back(Texture("res/textures/Grid1.png"));
 
 	///---------------------Shaders------------------------
 	shaders.push_back(Shader("res/shaders/textured.vert", "res/shaders/textured.frag"));
@@ -211,7 +214,7 @@ int main() {
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 
-
+		player.Update(deltaTime);
 		inputManager.ManageInput(window, deltaTime);
 
 		// Set background color
@@ -254,16 +257,20 @@ int main() {
 			glDrawArrays(GL_TRIANGLES, 0, 36);
 		}
 
-		//Bind VAO
+		//BG
 		VAOs[1].Bind();
 		textures[3].Bind();
+		textures[4].Bind();
+		textures[5].Bind();
+		textures[6].Bind();
 		shaders[2].Activate();
 		glm::mat4 model = glm::mat4(1.0f);
 		model = glm::translate(model, glm::vec3(0, 45, -20));
 		model = glm::scale(model, glm::vec3(100, 100, 100));
 		shaders[2].setMat4("transform", model);
 		glDrawArrays(GL_TRIANGLES, 0, 12);
-
+		
+		//Player
 		VAOs[2].Bind();
 		textures[1].Bind();
 		shaders[0].Activate();

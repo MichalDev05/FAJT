@@ -13,6 +13,7 @@ private:
 	Camera* m_Camera;
 	Player* m_Player;
 	float m_DeadZones = 0.1f;
+	float m_YDeadZones = 0.1f;
 
 
 };

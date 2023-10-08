@@ -19,13 +19,17 @@ void InputManager::ManageInput(GLFWwindow* window, float deltaTime) {
 
     int present = glfwJoystickPresent(GLFW_JOYSTICK_1);
     //std::cout << "Joistick: " << present << "\n";
-
     if (present == 1) {
+        float moveX = 0;
         int axesCount;
         const float* axes = glfwGetJoystickAxes(GLFW_JOYSTICK_1, &axesCount);
 
         if (axes[0] >= m_DeadZones || axes[0] <= -m_DeadZones) {
-            m_Player->Move(glm::vec3(1, 0, 0) * cameraSpeed * -axes[0]);
+            moveX = -axes[0];
+        }
+
+        if (axes[1] <= -m_YDeadZones && m_Player->IsGrounded()) {
+            m_Player->Jump();
         }
         //std::cout << "Joistick Axes: " << axesCount << "\n";
         //std::cout << "Joistick LefStick X: " << axes[0] << "\n";
@@ -42,6 +46,16 @@ void InputManager::ManageInput(GLFWwindow* window, float deltaTime) {
             std::cout << "Joistick Button Triangle" << "\n";
         if (GLFW_PRESS == buttons[0])
             std::cout << "Joistick Button Square" << "\n";
+        if (GLFW_PRESS == buttons[15]) // >
+            moveX = -1;
+        if (GLFW_PRESS == buttons[17]) // <
+            moveX = 1;
+        if (GLFW_PRESS == buttons[14] && m_Player->IsGrounded()) // ^
+            m_Player->Jump();
 
+
+        std::cout << moveX << "\n";
+        m_Player->Move(glm::vec3(1, 0, 0) * moveX, deltaTime);
     }
+
 }
