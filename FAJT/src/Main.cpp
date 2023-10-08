@@ -131,6 +131,7 @@ int main() {
 	///---------------------Shaders------------------------
 	//Shader shaderProgram("res/shaders/default.vert", "res/shaders/default.frag");
 	Shader shaderProgram("res/shaders/textured.vert", "res/shaders/textured.frag");
+	Shader shaderProgram2("res/shaders/default.vert", "res/shaders/default.frag");
 
 	//Activate shaderProgram
 	shaderProgram.Activate();
@@ -171,25 +172,33 @@ int main() {
 		// Clean the back buffer and assign the new color to it
 		//glClear(GL_COLOR_BUFFER_BIT);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		// Use ShaderProgram
-		shaderProgram.Activate();
 
 		glm::mat4 view = camera.GetViewMatrix();
 		glm::mat4 transform = glm::mat4(1.0f);
 		glm::mat4 projection = camera.GetProjectionMatrix(1280.0f / 720.0f);
 
+		// Use ShaderProgram
+		shaderProgram.Activate();
 		shaderProgram.setMat4("view", view);
 		shaderProgram.setMat4("projection", projection);
+		shaderProgram2.Activate();
+		shaderProgram2.setMat4("view", view);
+		shaderProgram2.setMat4("projection", projection);
 		//shaderProgram.setMat4("transform", transform);
 
 		VAO1.Bind();
+		int j = 3;
 		for (unsigned int i = 0; i < 10; i++)
 		{
+			if (i < j) shaderProgram.Activate();
+			if (i >= j) shaderProgram2.Activate();
+
 			glm::mat4 model = glm::mat4(1.0f);
 			model = glm::translate(model, cubePositions[i]);
 			float angle = 20.0f * i;
 			model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
-			shaderProgram.setMat4("transform", model);
+			if (i < j) shaderProgram.setMat4("transform", model);
+			if (i >= j) shaderProgram2.setMat4("transform", model);
 
 			glDrawArrays(GL_TRIANGLES, 0, 36);
 		}
