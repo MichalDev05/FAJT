@@ -159,11 +159,16 @@ int main() {
 	///---------------------Textures-----------------------
 	//Generate texture
 	Texture texture("res/textures/ShrekProfile.jpg");
+	Texture texture2("res/textures/uvTest.png");
+	Texture texture3("res/textures/training_hexas.png");
+	Texture texture4("res/textures/HexagonGrid.jpg");
+	//Texture texture("res/textures/ShrekProfile.jpg");
 
 	///---------------------Shaders------------------------
 	//Shader shaderProgram("res/shaders/default.vert", "res/shaders/default.frag");
 	Shader shaderProgram("res/shaders/textured.vert", "res/shaders/textured.frag");
 	Shader shaderProgram2("res/shaders/default.vert", "res/shaders/default.frag");
+	Shader shaderProgram3("res/shaders/tiled.vert", "res/shaders/tiledTex.frag");
 
 	//Activate shaderProgram
 	shaderProgram.Activate();
@@ -216,9 +221,13 @@ int main() {
 		shaderProgram2.Activate();
 		shaderProgram2.setMat4("view", view);
 		shaderProgram2.setMat4("projection", projection);
+		shaderProgram3.Activate();
+		shaderProgram3.setMat4("view", view);
+		shaderProgram3.setMat4("projection", projection);
 		//shaderProgram.setMat4("transform", transform);
 
 		VAO1.Bind();
+		texture.Bind();
 		int j = 3;
 		for (unsigned int i = 0; i < 10; i++)
 		{
@@ -237,11 +246,12 @@ int main() {
 
 		//Bind VAO
 		VAO2.Bind();
-		shaderProgram.Activate();
+		texture4.Bind();
+		shaderProgram3.Activate();
 		glm::mat4 model = glm::mat4(1.0f);
-		model = glm::translate(model, glm::vec3(0, -2, 0));
-		model = glm::scale(model, glm::vec3(10, 10, 10));
-		shaderProgram.setMat4("transform", model);
+		model = glm::translate(model, glm::vec3(0, 45, -20));
+		model = glm::scale(model, glm::vec3(100, 100, 100));
+		shaderProgram3.setMat4("transform", model);
 		glDrawArrays(GL_TRIANGLES, 0, 12);
 		//Set polygon render mode (wireframe)
 		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);

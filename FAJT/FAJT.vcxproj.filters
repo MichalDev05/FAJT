@@ -61,10 +61,18 @@
     <None Include="res\shaders\textured.vert">
       <Filter>res\shaders</Filter>
     </None>
+    <None Include="res\shaders\tiled.frag" />
+    <None Include="res\shaders\tiledTex.frag" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\textures\ShrekProfile.jpg">
       <Filter>res\textures</Filter>
     </Image>
+    <Image Include="res\textures\training_hexas.png" />
+    <Image Include="res\textures\uvTest.png" />
+    <Image Include="res\textures\HexagonGrid.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="res\shaders\tiled.vert" />
   </ItemGroup>
 </Project>

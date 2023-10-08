@@ -155,9 +155,14 @@
     <None Include="res\shaders\default.vert" />
     <None Include="res\shaders\textured.frag" />
     <None Include="res\shaders\textured.vert" />
+    <None Include="res\shaders\tiled.frag" />
+    <None Include="res\shaders\tiledTex.frag" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="res\textures\HexagonGrid.jpg" />
     <Image Include="res\textures\ShrekProfile.jpg" />
+    <Image Include="res\textures\training_hexas.png" />
+    <Image Include="res\textures\uvTest.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="vendor\GLFW\GLFW.vcxproj">
@@ -166,6 +171,9 @@
     <ProjectReference Include="vendor\Glad\Glad.vcxproj">
       <Project>{BDD6857C-A90D-870D-52FA-6C103E10030F}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="res\shaders\tiled.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
