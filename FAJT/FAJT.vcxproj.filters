@@ -36,6 +36,7 @@
     <ClInclude Include="src\VBO.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\Player.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\InputManager.cpp">

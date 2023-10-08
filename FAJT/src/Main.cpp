@@ -4,6 +4,7 @@
 #include "Shader.h"
 #include "Texture.h"
 #include "Camera.h"
+#include "Player.h"
 #include "InputManager.h"
 #include "VBO.h"
 #include "EBO.h"
@@ -19,6 +20,8 @@ InputManager inputManager;
 
 int main() {
 	std::cout << "Hello World!";
+
+	Player player(glm::vec3(0.0f, -2.5, -4.0f));
 
 	/*float vertices[] = {
 		// positions          // texture coords
@@ -91,6 +94,16 @@ int main() {
 	 0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
 	};
 
+	float playerVertices[] = {
+		-0.5f,  0.5f, 0.0f,   0.0f, 1.0f,    // top left
+		0.5f,  0.5f, 0.0f,   1.0f, 1.0f,   // top right
+		-0.5f, -0.5f, 0.0f,   0.0f, 0.0f,   // bottom left
+
+		0.5f,  0.5f, 0.0f,   1.0f, 1.0f,   // top right
+		 0.5f, -0.5f, 0.0f,   1.0f, 0.0f,   // bottom right
+		-0.5f, -0.5f, 0.0f,   0.0f, 0.0f   // bottom left
+	};
+
 	glm::vec3 cubePositions[] = {
 		glm::vec3(0.0f,  0.0f,  0.0f),
 		glm::vec3(2.0f,  0.0f, -15.0f),
@@ -132,10 +145,12 @@ int main() {
 	// Create Vertex Buffer Objects
 	VBO VBO1(vertices, sizeof(vertices));
 	VBO VBO2(bgVertices, sizeof(bgVertices));
+	VBO VBO3(playerVertices, sizeof(playerVertices));
 
 	// Create Vertex Array Objects
 	VAO VAO1;
 	VAO VAO2;
+	VAO VAO3;
 
 	// Configure VAO1 for the 'vertices'
 	VAO1.Bind();
@@ -149,6 +164,14 @@ int main() {
 	// Configure VAO2 for the 'bgVertices'
 	VAO2.Bind();
 	VBO2.Bind();
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, vertexValuesCount * sizeof(float), (void*)0);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, vertexValuesCount * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(0);
+	glEnableVertexAttribArray(1);
+	
+	// Configure VAO2 for the 'playerVertices'
+	VAO3.Bind();
+	VBO3.Bind();
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, vertexValuesCount * sizeof(float), (void*)0);
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, vertexValuesCount * sizeof(float), (void*)(3 * sizeof(float)));
 	glEnableVertexAttribArray(0);
@@ -181,6 +204,7 @@ int main() {
 	Camera camera(glm::vec3(0.0f, 0.0f, -20.0f), glm::vec3(0.0f, 1.0f, 0.0f), 90, 0);
 
 	inputManager.SetCamera(&camera);
+	inputManager.SetPlayer(&player);
 
 
 	///----------------------------------------------------
@@ -253,6 +277,15 @@ int main() {
 		model = glm::scale(model, glm::vec3(100, 100, 100));
 		shaderProgram3.setMat4("transform", model);
 		glDrawArrays(GL_TRIANGLES, 0, 12);
+
+		VAO3.Bind();
+		texture2.Bind();
+		shaderProgram.Activate();
+		model = player.GetPositionMatrix();
+		model = glm::scale(model, glm::vec3(5, 5, 5));
+		shaderProgram.setMat4("transform", model);
+		glDrawArrays(GL_TRIANGLES, 0, 6);
+
 		//Set polygon render mode (wireframe)
 		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		//Draw triangles
