@@ -24,6 +24,11 @@ public:
         return glm::perspective(glm::radians(fov), aspectRatio, nearClip, farClip);
     }
 
+    void Move(glm::vec3 move) {
+        //position = glm::vec3(position.x + move.x, position.y + move.y, position.z + move.z);
+        position += move;
+    }
+
     // Implement camera control functions (e.g., processInput)
 
 private:

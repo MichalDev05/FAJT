@@ -52,7 +52,7 @@ project "FAJT"
         systemversion "latest"
 
         defines{
-
+            "GLFW_INCLUDE_NONE" 
         }
 
     filter "configurations:Debug"

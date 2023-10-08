@@ -4,6 +4,7 @@
 #include "Shader.h"
 #include "Texture.h"
 #include "Camera.h"
+#include "InputManager.h"
 #include "VBO.h"
 #include "EBO.h"
 #include "VAO.h"
@@ -11,6 +12,10 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+float deltaTime = 0.0f;
+float lastFrame = 0.0f;
+
+InputManager inputManager;
 
 int main() {
 	std::cout << "Hello World!";
@@ -136,9 +141,8 @@ int main() {
 
 	///-------------------Camera/View----------------------
 	Camera camera(glm::vec3(0.0f, 0.0f, -20.0f), glm::vec3(0.0f, 1.0f, 0.0f), 90, 0);
-	glm::mat4 view = camera.GetViewMatrix();
-	glm::mat4 transform = glm::mat4(1.0f);
-	glm::mat4 projection = camera.GetProjectionMatrix(1280.0f / 720.0f);
+
+	inputManager.SetCamera(&camera);
 
 
 	///----------------------------------------------------
@@ -155,6 +159,13 @@ int main() {
 
 
 	while (!glfwWindowShouldClose(window)) {
+		float currentFrame = glfwGetTime();
+		deltaTime = currentFrame - lastFrame;
+		lastFrame = currentFrame;
+
+
+		inputManager.ManageInput(window, deltaTime);
+
 		// Set background color
 		glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
 		// Clean the back buffer and assign the new color to it
@@ -162,6 +173,10 @@ int main() {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		// Use ShaderProgram
 		shaderProgram.Activate();
+
+		glm::mat4 view = camera.GetViewMatrix();
+		glm::mat4 transform = glm::mat4(1.0f);
+		glm::mat4 projection = camera.GetProjectionMatrix(1280.0f / 720.0f);
 
 		shaderProgram.setMat4("view", view);
 		shaderProgram.setMat4("projection", projection);

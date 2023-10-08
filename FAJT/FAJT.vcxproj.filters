@@ -15,7 +15,13 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Camera.h">
+      <Filter>src</Filter>
+    </ClInclude>
     <ClInclude Include="src\EBO.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\InputManager.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\Shader.h">
@@ -30,9 +36,11 @@
     <ClInclude Include="src\VBO.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\Camera.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\InputManager.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
     <ClCompile Include="src\Main.cpp">
       <Filter>src</Filter>
     </ClCompile>
