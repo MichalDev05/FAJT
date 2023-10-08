@@ -72,6 +72,25 @@ int main() {
 	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f
 	};
 
+
+	float bgVertices[] = {
+	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+	-0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
+	 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+
+	 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+
+	-0.5f, -0.5f,  0.5f,  0.0f, 1.0f,
+	 0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
+	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+
+	-0.5f, -0.5f,  0.5f,  0.0f, 1.0f,
+	 0.5f, -0.5f,  0.5f,  1.0f, 1.0f,
+	 0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
+	};
+
 	glm::vec3 cubePositions[] = {
 		glm::vec3(0.0f,  0.0f,  0.0f),
 		glm::vec3(2.0f,  0.0f, -15.0f),
@@ -110,18 +129,31 @@ int main() {
 	glViewport(0, 0, 1280, 720);
 
 
-
-	//Create Vertex Buffer Object
+	// Create Vertex Buffer Objects
 	VBO VBO1(vertices, sizeof(vertices));
-	VBO1.Bind();
+	VBO VBO2(bgVertices, sizeof(bgVertices));
 
-	//Create Vertex Array Object
+	// Create Vertex Array Objects
 	VAO VAO1;
-	VAO1.Bind();
+	VAO VAO2;
 
-	//Create Element Buffer Object
-	EBO EBO1(indices, sizeof(indices));
-	EBO1.Bind();
+	// Configure VAO1 for the 'vertices'
+	VAO1.Bind();
+	VBO1.Bind();
+	int vertexValuesCount = 5;
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, vertexValuesCount * sizeof(float), (void*)0);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, vertexValuesCount * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(0);
+	glEnableVertexAttribArray(1);
+
+	// Configure VAO2 for the 'bgVertices'
+	VAO2.Bind();
+	VBO2.Bind();
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, vertexValuesCount * sizeof(float), (void*)0);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, vertexValuesCount * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(0);
+	glEnableVertexAttribArray(1);
+
 
 
 	///---------------------Textures-----------------------
@@ -150,12 +182,12 @@ int main() {
 
 	//specify opengl implementation
 	//number of values for 1 vertex
-	int vertexValuesCount = 5;
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, vertexValuesCount * sizeof(float), (void*)0);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, vertexValuesCount * sizeof(float), (void*)(3 * sizeof(float)));
+	//int vertexValuesCount = 5;
+	//glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, vertexValuesCount * sizeof(float), (void*)0);
+	//glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, vertexValuesCount * sizeof(float), (void*)(3 * sizeof(float)));
 	//enable opengl implementation
-	glEnableVertexAttribArray(0);
-	glEnableVertexAttribArray(1);
+	//glEnableVertexAttribArray(0);
+	//glEnableVertexAttribArray(1);
 
 
 
@@ -204,7 +236,13 @@ int main() {
 		}
 
 		//Bind VAO
-		VAO1.Bind();
+		VAO2.Bind();
+		shaderProgram.Activate();
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(0, -2, 0));
+		model = glm::scale(model, glm::vec3(10, 10, 10));
+		shaderProgram.setMat4("transform", model);
+		glDrawArrays(GL_TRIANGLES, 0, 12);
 		//Set polygon render mode (wireframe)
 		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		//Draw triangles
