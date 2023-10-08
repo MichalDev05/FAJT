@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include "Shader.h"
@@ -20,6 +21,11 @@ InputManager inputManager;
 
 int main() {
 	std::cout << "Hello World!";
+
+	std::vector<VAO> VAOs;
+	std::vector<VBO> VBOs;
+	std::vector<Texture> textures;
+	std::vector<Shader> shaders;
 
 	Player player(glm::vec3(0.0f, -2.5, -4.0f));
 
@@ -143,58 +149,38 @@ int main() {
 
 
 	// Create Vertex Buffer Objects
-	VBO VBO1(vertices, sizeof(vertices));
-	VBO VBO2(bgVertices, sizeof(bgVertices));
-	VBO VBO3(playerVertices, sizeof(playerVertices));
+	VBOs.push_back(VBO(vertices, sizeof(vertices)));
+	VBOs.push_back(VBO(bgVertices, sizeof(bgVertices)));
+	VBOs.push_back(VBO(playerVertices, sizeof(playerVertices)));
 
 	// Create Vertex Array Objects
-	VAO VAO1;
-	VAO VAO2;
-	VAO VAO3;
+	for (int i = 0; i < VBOs.size(); i++) {
+		VAOs.push_back(VAO());
+	}
 
-	// Configure VAO1 for the 'vertices'
-	VAO1.Bind();
-	VBO1.Bind();
-	int vertexValuesCount = 5;
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, vertexValuesCount * sizeof(float), (void*)0);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, vertexValuesCount * sizeof(float), (void*)(3 * sizeof(float)));
-	glEnableVertexAttribArray(0);
-	glEnableVertexAttribArray(1);
-
-	// Configure VAO2 for the 'bgVertices'
-	VAO2.Bind();
-	VBO2.Bind();
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, vertexValuesCount * sizeof(float), (void*)0);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, vertexValuesCount * sizeof(float), (void*)(3 * sizeof(float)));
-	glEnableVertexAttribArray(0);
-	glEnableVertexAttribArray(1);
-	
-	// Configure VAO2 for the 'playerVertices'
-	VAO3.Bind();
-	VBO3.Bind();
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, vertexValuesCount * sizeof(float), (void*)0);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, vertexValuesCount * sizeof(float), (void*)(3 * sizeof(float)));
-	glEnableVertexAttribArray(0);
-	glEnableVertexAttribArray(1);
+	for (int i = 0; i < VBOs.size(); i++) {
+		VAOs[i].Bind();
+		VBOs[i].Bind();
+		int vertexValuesCount = 5;
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, vertexValuesCount * sizeof(float), (void*)0);
+		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, vertexValuesCount * sizeof(float), (void*)(3 * sizeof(float)));
+		glEnableVertexAttribArray(0);
+		glEnableVertexAttribArray(1);
+	}
 
 
 
 	///---------------------Textures-----------------------
 	//Generate texture
-	Texture texture("res/textures/ShrekProfile.jpg");
-	Texture texture2("res/textures/uvTest.png");
-	Texture texture3("res/textures/training_hexas.png");
-	Texture texture4("res/textures/HexagonGrid.jpg");
-	//Texture texture("res/textures/ShrekProfile.jpg");
+	textures.push_back(Texture("res/textures/ShrekProfile.jpg"));
+	textures.push_back(Texture("res/textures/uvTest.png"));
+	textures.push_back(Texture("res/textures/training_hexas.png"));
+	textures.push_back(Texture("res/textures/HexagonGrid.jpg"));
 
 	///---------------------Shaders------------------------
-	//Shader shaderProgram("res/shaders/default.vert", "res/shaders/default.frag");
-	Shader shaderProgram("res/shaders/textured.vert", "res/shaders/textured.frag");
-	Shader shaderProgram2("res/shaders/default.vert", "res/shaders/default.frag");
-	Shader shaderProgram3("res/shaders/tiled.vert", "res/shaders/tiledTex.frag");
-
-	//Activate shaderProgram
-	shaderProgram.Activate();
+	shaders.push_back(Shader("res/shaders/textured.vert", "res/shaders/textured.frag"));
+	shaders.push_back(Shader("res/shaders/default.vert", "res/shaders/default.frag"));
+	shaders.push_back(Shader("res/shaders/tiled.vert", "res/shaders/tiledTex.frag"));
 
 	///----------------------------------------------------
 
@@ -239,51 +225,51 @@ int main() {
 		glm::mat4 projection = camera.GetProjectionMatrix(1280.0f / 720.0f);
 
 		// Use ShaderProgram
-		shaderProgram.Activate();
-		shaderProgram.setMat4("view", view);
-		shaderProgram.setMat4("projection", projection);
-		shaderProgram2.Activate();
-		shaderProgram2.setMat4("view", view);
-		shaderProgram2.setMat4("projection", projection);
-		shaderProgram3.Activate();
-		shaderProgram3.setMat4("view", view);
-		shaderProgram3.setMat4("projection", projection);
+		shaders[0].Activate();
+		shaders[0].setMat4("view", view);
+		shaders[0].setMat4("projection", projection);
+		shaders[1].Activate();
+		shaders[1].setMat4("view", view);
+		shaders[1].setMat4("projection", projection);
+		shaders[2].Activate();
+		shaders[2].setMat4("view", view);
+		shaders[2].setMat4("projection", projection);
 		//shaderProgram.setMat4("transform", transform);
 
-		VAO1.Bind();
-		texture.Bind();
+		VAOs[0].Bind();
+		textures[0].Bind();
 		int j = 3;
 		for (unsigned int i = 0; i < 10; i++)
 		{
-			if (i < j) shaderProgram.Activate();
-			if (i >= j) shaderProgram2.Activate();
+			if (i < j) shaders[0].Activate();
+			if (i >= j) shaders[1].Activate();
 
 			glm::mat4 model = glm::mat4(1.0f);
 			model = glm::translate(model, cubePositions[i]);
 			float angle = 20.0f * i;
 			model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
-			if (i < j) shaderProgram.setMat4("transform", model);
-			if (i >= j) shaderProgram2.setMat4("transform", model);
+			if (i < j) shaders[0].setMat4("transform", model);
+			if (i >= j) shaders[1].setMat4("transform", model);
 
 			glDrawArrays(GL_TRIANGLES, 0, 36);
 		}
 
 		//Bind VAO
-		VAO2.Bind();
-		texture4.Bind();
-		shaderProgram3.Activate();
+		VAOs[1].Bind();
+		textures[3].Bind();
+		shaders[2].Activate();
 		glm::mat4 model = glm::mat4(1.0f);
 		model = glm::translate(model, glm::vec3(0, 45, -20));
 		model = glm::scale(model, glm::vec3(100, 100, 100));
-		shaderProgram3.setMat4("transform", model);
+		shaders[2].setMat4("transform", model);
 		glDrawArrays(GL_TRIANGLES, 0, 12);
 
-		VAO3.Bind();
-		texture2.Bind();
-		shaderProgram.Activate();
+		VAOs[2].Bind();
+		textures[1].Bind();
+		shaders[0].Activate();
 		model = player.GetPositionMatrix();
 		model = glm::scale(model, glm::vec3(5, 5, 5));
-		shaderProgram.setMat4("transform", model);
+		shaders[0].setMat4("transform", model);
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 
 		//Set polygon render mode (wireframe)

@@ -149,6 +149,7 @@
   <ItemGroup>
     <ClCompile Include="src\InputManager.cpp" />
     <ClCompile Include="src\Main.cpp" />
+    <ClCompile Include="src\Player.cpp" />
     <ClCompile Include="src\Shader.cpp" />
   </ItemGroup>
   <ItemGroup>
